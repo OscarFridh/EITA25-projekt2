@@ -5,12 +5,22 @@ import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
 import java.math.BigInteger;
+import java.util.Hashtable;
+import java.util.ArrayList;
 
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
+    private static String mRecord = "Medical Records";
+    private static Hashtable<String, ArrayList<String>> medicalRecords;
+    private static ArrayList<String> doctorList;
 
     public server(ServerSocket ss) throws IOException {
+        medicalRecords = new Hashtable<String, ArrayList<String>>();
+        doctorList = new ArrayList<String>();
+        doctorList.add("Doctor");
+        doctorList.add("info1");
+        medicalRecords.put("CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE", doctorList);
         serverSocket = ss;
         newListener();
     }
@@ -24,12 +34,15 @@ public class server implements Runnable {
             String subject = cert.getSubjectDN().getName();
             String issuer = cert.getIssuerDN().getName();
             BigInteger serial = cert.getSerialNumber();
+            String title = medicalRecords.get(subject).get(0);
     	    numConnectedClients++;
             System.out.println("client connected");
             System.out.println("client name (cert subject DN field): " + subject);
             System.out.println("certificate issuer:\n" + issuer + "\n");
             System.out.println("certificate serial number:\n" + serial + "\n");
+            System.out.println("Titel = " + title);
             System.out.println(numConnectedClients + " concurrent connection(s)\n");
+
 
             PrintWriter out = null;
             BufferedReader in = null;
@@ -38,12 +51,22 @@ public class server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-			    String rev = new StringBuilder(clientMsg).reverse().toString();
+              if(clientMsg.equals("Medical")) {
                 System.out.println("received '" + clientMsg + "' from client");
-                System.out.print("sending '" + rev + "' to client...");
-				out.println(rev);
-				out.flush();
-                System.out.println("done\n");
+                System.out.println("sending '" + getmRecord() + "' to client...");
+                out.println(getmRecord());
+        				out.flush();
+                        System.out.println("done\n");
+              }
+              else {
+                String rev = new StringBuilder(clientMsg).reverse().toString();
+                      System.out.println("received '" + clientMsg + "' from client");
+                      System.out.print("sending '" + rev + "' to client...");
+      				out.println(rev);
+      				out.flush();
+                      System.out.println("done\n");
+              }
+
 			}
 			in.close();
 			out.close();
@@ -103,5 +126,9 @@ public class server implements Runnable {
             return ServerSocketFactory.getDefault();
         }
         return null;
+    }
+
+    public static String getmRecord() {
+      return mRecord;
     }
 }
