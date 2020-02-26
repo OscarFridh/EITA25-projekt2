@@ -1,5 +1,12 @@
-export OUTPUT_DIR=$(pwd)/certificates
-export CA_DIR=$OUTPUT_DIR
+OUTPUT_DIR=$(pwd)/ca
+CA_DIR=$OUTPUT_DIR
+SERVER_RESOURCES=$(pwd)/server/resources
+CLIENT_RESOURCES=$(pwd)/client/resources
+
+recreate_folder() {
+  if [ -d "$1" ]; then rm -Rf "$1"; fi
+  mkdir "$1"
+}
 
 create_ca() {
     openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -subj "/CN=CA" -keyout ca.key -out ca.crt
@@ -39,20 +46,40 @@ create_keystore() {
     
     # Use keytool to verify that a certificate chain has been established.
     keytool -list -v -keystore "$KEYSTORE_NAME" -storepass password -keypass password
+
+    # Remove unnecessary files
+    rm certificate.csr
+    rm certificate.crt
+    rm "$CA_DIR/ca.srl"
 }
 
-# Clear existing files to reset
-if [ -d "$OUTPUT_DIR" ]; then rm -Rf "$OUTPUT_DIR"; fi
-mkdir "$OUTPUT_DIR"
+add_client_keystores() {
+  cd "$OUTPUT_DIR"
+  mkdir -p "$CLIENT_RESOURCES"
+  create_truststore clienttruststore
+  mv clienttruststore "$CLIENT_RESOURCES/clienttruststore"
+  create_keystore clientkeystore "CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE"
+  mv clientkeystore "$CLIENT_RESOURCES/clientkeystore"
+}
+
+add_server_keystores() {
+  cd "$OUTPUT_DIR"
+  mkdir -p "$SERVER_RESOURCES"
+  create_truststore servertruststore
+  mv servertruststore "$SERVER_RESOURCES/servertruststore"
+  create_keystore serverkeystore "CN=MyServer, OU=LTH, O=LTH, L=Lund, ST=SE, C=SE"
+  mv serverkeystore "$SERVER_RESOURCES/serverkeystore"
+}
+
+# Remove existing files to reset
+recreate_folder "$OUTPUT_DIR"
 cd "$OUTPUT_DIR"
 
 # CA
 create_ca
 
-# Client
-create_truststore clienttruststore
-create_keystore clientkeystore "CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE"
+# Clients
+add_client_keystores # TODO: Create multiple clients and inject DName
 
 # Server
-create_truststore servertruststore
-create_keystore serverkeystore "CN=MyServer, OU=LTH, O=LTH, L=Lund, ST=SE, C=SE"
+add_server_keystores

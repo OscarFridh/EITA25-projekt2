@@ -72,4 +72,6 @@ fabric.properties
 
 # Other
 .DS_Store
-certificates
+ca
+client/resources
+server/resources
