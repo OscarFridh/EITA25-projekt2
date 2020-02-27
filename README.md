@@ -19,12 +19,14 @@ They each have their own source code and resources. Tests will probably also be 
 
 4: Start the server from one terminal
 ````
-java out/production/server/server 9875
+cd out/production/server
+java server 9875
 ````
 
 4: Start the client from another terminal
 ````
-java out/production/client/client localhost 9875
+cd out/production/client
+java client localhost 9875
 ````
 
 5: Improve the project! :rocket:
