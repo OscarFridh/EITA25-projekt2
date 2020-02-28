@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
-    private static String mRecord = "Medical Records";
+
     private static Hashtable<String, ArrayList<String>> medicalRecords;
     private static ArrayList<String> doctorList;
 
@@ -51,22 +51,13 @@ public class server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-              if(clientMsg.equals("Medical")) {
+                RequestController controller = new RequestController();
+                String response = controller.handleRequest(clientMsg);
                 System.out.println("received '" + clientMsg + "' from client");
-                System.out.println("sending '" + getmRecord() + "' to client...");
-                out.println(getmRecord());
-        				out.flush();
-                        System.out.println("done\n");
-              }
-              else {
-                String rev = new StringBuilder(clientMsg).reverse().toString();
-                      System.out.println("received '" + clientMsg + "' from client");
-                      System.out.print("sending '" + rev + "' to client...");
-      				out.println(rev);
-      				out.flush();
-                      System.out.println("done\n");
-              }
-
+                System.out.println("sending '" + response + "' to client...");
+                out.println(response);
+                out.flush();
+                System.out.println("done\n");
 			}
 			in.close();
 			out.close();
@@ -129,7 +120,4 @@ public class server implements Runnable {
         return null;
     }
 
-    public static String getmRecord() {
-      return mRecord;
-    }
 }
