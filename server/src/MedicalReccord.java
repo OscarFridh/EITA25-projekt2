@@ -1,9 +1,15 @@
 public class MedicalReccord {
 
+    private int id;
     private String text;
 
-    public MedicalReccord(String text) {
+    public MedicalReccord(int id, String text) {
+        this.id = id;
         this.text = text;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getText() {

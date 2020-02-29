@@ -6,7 +6,7 @@ class MedicalReccordControllerTest {
 
     @Test
     void readMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord("Medical reccord 1"));
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord(1, "Medical reccord 1"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(1);
@@ -17,7 +17,7 @@ class MedicalReccordControllerTest {
 
     @Test
     void readAnotherMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord("Medical reccord 2"));
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord(2, "Medical reccord 2"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(2);
