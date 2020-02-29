@@ -26,6 +26,8 @@ public class server implements Runnable {
         serverSocket = ss;
 
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
+        repository.add(new MedicalReccord(1, "Medical reccord 1"));
+        repository.add(new MedicalReccord(2, "Medical reccord 2"));
         MedicalReccordController medicalReccordController = new MedicalReccordController(repository);
         router = new Router(medicalReccordController);
 
