@@ -6,7 +6,7 @@ class MedicalReccordControllerTest {
 
     @Test
     void readMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock("Medical reccord 1");
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord("Medical reccord 1"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(1);
@@ -17,7 +17,7 @@ class MedicalReccordControllerTest {
 
     @Test
     void readAnotherMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock("Medical reccord 2");
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord("Medical reccord 2"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(2);
@@ -27,19 +27,17 @@ class MedicalReccordControllerTest {
     }
 
 
-
-
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 
-        private String fetchResult;
+        private MedicalReccord fetchResult;
         private Integer lastFetch;
 
-        public MedicalReccordRepositoryMock(String fetchResult) {
+        public MedicalReccordRepositoryMock(MedicalReccord fetchResult) {
             this.fetchResult = fetchResult;
         }
 
         @Override
-        public String fetchMedicalReccord(int id) {
+        public MedicalReccord fetchMedicalReccord(int id) {
             lastFetch = id;
             return fetchResult;
         }

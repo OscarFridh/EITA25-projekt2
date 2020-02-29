@@ -1,7 +1,7 @@
 public class InMemoryMedicalReccordRepository implements MedicalReccordRepository {
 
     @Override
-    public String fetchMedicalReccord(int id) {
+    public MedicalReccord fetchMedicalReccord(int id) {
         return null;
     }
 }

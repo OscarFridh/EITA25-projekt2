@@ -8,6 +8,6 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String read(int id) {
-        return repository.fetchMedicalReccord(id);
+        return repository.fetchMedicalReccord(id).getText();
     }
 }

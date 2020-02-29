@@ -1,3 +1,3 @@
 public interface MedicalReccordRepository {
-    String fetchMedicalReccord(int id);
+    MedicalReccord fetchMedicalReccord(int id);
 }
