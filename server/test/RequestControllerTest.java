@@ -5,8 +5,74 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestControllerTest {
 
     @Test
+    void readMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
+
+        String response = sut.handleRequest("read 1");
+
+        assertEquals("Read result", response);
+        assertEquals(1, medicalReccordControllerMock.getLastRead());
+    }
+
+    @Test
+    void readAnotherMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
+
+        String response = sut.handleRequest("read 2");
+
+        assertEquals("Another read result", response);
+        assertEquals(2, medicalReccordControllerMock.getLastRead());
+    }
+
+    @Test
+    void readMedicalReccordWithoutSpecifyingId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
+
+        String response = sut.handleRequest("read");
+
+        assertEquals("Invalid command", response);
+        assertEquals(null, medicalReccordControllerMock.getLastRead());
+    }
+
+    @Test
+    void readMedicalReccordWithInvalidId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
+
+        String response = sut.handleRequest("read x");
+
+        assertEquals("Invalid command", response);
+        assertEquals(null, medicalReccordControllerMock.getLastRead());
+    }
+
+    class MedicalReccordControllerMock implements MedicalReccordControlling {
+
+        private  Integer lastRead;
+        private String readResult;
+
+        public MedicalReccordControllerMock(String readResult) {
+            this.readResult = readResult;
+        }
+
+        public Integer getLastRead() {
+            return lastRead;
+        }
+
+        @Override
+        public String read(int id) {
+            lastRead = id;
+            return readResult;
+        }
+    }
+
+
+    @Test
     void handleRequestForMedicalReccords() {
-        RequestController sut = new RequestController();
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("Medical");
 
@@ -15,7 +81,8 @@ class RequestControllerTest {
 
     @Test
     void handleAnotherRequest() {
-        RequestController sut = new RequestController();
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        RequestController sut = new RequestController(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("abc");
 

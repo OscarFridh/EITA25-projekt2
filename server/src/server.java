@@ -51,7 +51,8 @@ public class server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-                RequestController controller = new RequestController();
+                MedicalReccordController medicalReccordController = new MedicalReccordController();
+                RequestController controller = new RequestController(medicalReccordController);
                 String response = controller.handleRequest(clientMsg);
                 System.out.println("received '" + clientMsg + "' from client");
                 System.out.println("sending '" + response + "' to client...");
