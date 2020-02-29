@@ -15,6 +15,8 @@ public class server implements Runnable {
     private static Hashtable<String, ArrayList<String>> medicalRecords;
     private static ArrayList<String> doctorList;
 
+    private Router router;
+
     public server(ServerSocket ss) throws IOException {
         medicalRecords = new Hashtable<String, ArrayList<String>>();
         doctorList = new ArrayList<String>();
@@ -22,6 +24,11 @@ public class server implements Runnable {
         doctorList.add("info1");
         medicalRecords.put("CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE", doctorList);
         serverSocket = ss;
+
+        InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
+        MedicalReccordController medicalReccordController = new MedicalReccordController(repository);
+        router = new Router(medicalReccordController);
+
         newListener();
     }
 
@@ -51,10 +58,7 @@ public class server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-                InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
-                MedicalReccordController medicalReccordController = new MedicalReccordController(repository);
-                RequestController controller = new RequestController(medicalReccordController);
-                String response = controller.handleRequest(clientMsg);
+                String response = router.handleRequest(clientMsg);
                 System.out.println("received '" + clientMsg + "' from client");
                 System.out.println("sending '" + response + "' to client...");
                 out.println(response);

@@ -2,12 +2,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RequestControllerTest {
+class RouterTest {
 
     @Test
     void readMedicalReccord() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read 1");
 
@@ -18,7 +18,7 @@ class RequestControllerTest {
     @Test
     void readAnotherMedicalReccord() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read 2");
 
@@ -29,7 +29,7 @@ class RequestControllerTest {
     @Test
     void readMedicalReccordWithoutSpecifyingId() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read");
 
@@ -40,7 +40,7 @@ class RequestControllerTest {
     @Test
     void readMedicalReccordWithInvalidId() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read x");
 
@@ -51,7 +51,7 @@ class RequestControllerTest {
     @Test
     void handleRequestForMedicalReccords() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("Medical");
 
@@ -61,7 +61,7 @@ class RequestControllerTest {
     @Test
     void handleAnotherRequest() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
-        RequestController sut = new RequestController(medicalReccordControllerMock);
+        Router sut = new Router(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("abc");
 

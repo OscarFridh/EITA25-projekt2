@@ -1,8 +1,8 @@
-public class RequestController {
+public class Router {
 
     private MedicalReccordControlling medicalReccordController;
 
-    public RequestController(MedicalReccordControlling medicalReccordController) {
+    public Router(MedicalReccordControlling medicalReccordController) {
         this.medicalReccordController = medicalReccordController;
     }
 
