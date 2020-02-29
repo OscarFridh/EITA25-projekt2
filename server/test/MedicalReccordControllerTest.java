@@ -26,6 +26,17 @@ class MedicalReccordControllerTest {
         assertEquals(2, repositoryMock.lastFetch);
     }
 
+    @Test
+    void readNonExistingMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(null);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.read(3);
+
+        assertEquals("No such reccord", response);
+        assertEquals(3, repositoryMock.lastFetch);
+    }
+
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 

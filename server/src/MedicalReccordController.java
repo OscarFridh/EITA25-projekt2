@@ -8,6 +8,11 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String read(int id) {
-        return repository.fetchMedicalReccord(id).getText();
+        MedicalReccord result = repository.fetchMedicalReccord(id);
+        if (result == null) {
+            return "No such reccord";
+        } else {
+            return result.getText();
+        }
     }
 }
