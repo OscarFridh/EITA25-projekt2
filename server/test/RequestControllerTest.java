@@ -48,27 +48,6 @@ class RequestControllerTest {
         assertEquals(null, medicalReccordControllerMock.getLastRead());
     }
 
-    class MedicalReccordControllerMock implements MedicalReccordControlling {
-
-        private  Integer lastRead;
-        private String readResult;
-
-        public MedicalReccordControllerMock(String readResult) {
-            this.readResult = readResult;
-        }
-
-        public Integer getLastRead() {
-            return lastRead;
-        }
-
-        @Override
-        public String read(int id) {
-            lastRead = id;
-            return readResult;
-        }
-    }
-
-
     @Test
     void handleRequestForMedicalReccords() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
@@ -87,5 +66,28 @@ class RequestControllerTest {
         String actual = sut.handleRequest("abc");
 
         assertEquals("cba", actual);
+    }
+
+
+
+
+    class MedicalReccordControllerMock implements MedicalReccordControlling {
+
+        private  Integer lastRead;
+        private String readResult;
+
+        public MedicalReccordControllerMock(String readResult) {
+            this.readResult = readResult;
+        }
+
+        public Integer getLastRead() {
+            return lastRead;
+        }
+
+        @Override
+        public String read(int id) {
+            lastRead = id;
+            return readResult;
+        }
     }
 }
