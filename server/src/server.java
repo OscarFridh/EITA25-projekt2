@@ -25,13 +25,17 @@ public class server implements Runnable {
         medicalRecords.put("CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE", doctorList);
         serverSocket = ss;
 
+        router = createRouter();
+
+        newListener();
+    }
+
+    private Router createRouter() {
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
         repository.add(new MedicalReccord(1, "Medical reccord 1"));
         repository.add(new MedicalReccord(2, "Medical reccord 2"));
         MedicalReccordController medicalReccordController = new MedicalReccordController(repository);
-        router = new Router(medicalReccordController);
-
-        newListener();
+        return new Router(medicalReccordController);
     }
 
     public void run() {
