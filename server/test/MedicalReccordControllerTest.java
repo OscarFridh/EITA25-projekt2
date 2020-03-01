@@ -6,7 +6,8 @@ class MedicalReccordControllerTest {
 
     @Test
     void readMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord(1, "Medical reccord 1"));
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setFetchResult(new MedicalReccord(1, "Medical reccord 1"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(1);
@@ -17,7 +18,8 @@ class MedicalReccordControllerTest {
 
     @Test
     void readAnotherMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(new MedicalReccord(2, "Medical reccord 2"));
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setFetchResult(new MedicalReccord(2, "Medical reccord 2"));
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(2);
@@ -28,7 +30,8 @@ class MedicalReccordControllerTest {
 
     @Test
     void readNonExistingMedicalReccord() {
-        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock(null);
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setFetchResult(null);
         MedicalReccordController sut = new MedicalReccordController(repositoryMock);
 
         String response = sut.read(3);
@@ -43,14 +46,18 @@ class MedicalReccordControllerTest {
         private MedicalReccord fetchResult;
         private Integer lastFetch;
 
-        public MedicalReccordRepositoryMock(MedicalReccord fetchResult) {
-            this.fetchResult = fetchResult;
-        }
-
         @Override
         public MedicalReccord fetchMedicalReccord(int id) {
             lastFetch = id;
             return fetchResult;
+        }
+
+        public Integer getLastFetch() {
+            return lastFetch;
+        }
+
+        public void setFetchResult(MedicalReccord fetchResult) {
+            this.fetchResult = fetchResult;
         }
     }
 }
