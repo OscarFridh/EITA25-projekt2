@@ -20,10 +20,10 @@ class InMemoryMedicalReccordRepositoryTest {
 
         // Then
         assertEquals(firstId, fetch1.getId());
-        assertEquals("Medical reccord 1", fetch1.getText());
+        assertEquals("Medical reccord 1", fetch1.getMedicalData());
 
         assertEquals(secondId, fetch2.getId());
-        assertEquals("Medical reccord 2", fetch2.getText());
+        assertEquals("Medical reccord 2", fetch2.getMedicalData());
 
         assertNull(fetch3);
     }

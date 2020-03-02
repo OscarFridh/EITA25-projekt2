@@ -2,12 +2,12 @@ public class MedicalReccord {
 
     private int id;
     private Patient patient;
-    private String text;
+    private String medicalData;
 
-    public MedicalReccord(int id, Patient patient, String text) {
+    public MedicalReccord(int id, Patient patient, String medicalData) {
         this.id = id;
         this.patient = patient;
-        this.text = text;
+        this.medicalData = medicalData;
     }
 
     public int getId() {
@@ -18,11 +18,11 @@ public class MedicalReccord {
         return patient;
     }
 
-    public String getText() {
-        return text;
+    public String getMedicalData() {
+        return medicalData;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMedicalData(String medicalData) {
+        this.medicalData = medicalData;
     }
 }

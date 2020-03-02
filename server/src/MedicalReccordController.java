@@ -25,7 +25,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
         if (result == null) {
             return "No such reccord";
         } else if (user.canRead(result)) {
-            return result.getText();
+            return result.getMedicalData();
         } else {
             return "Access denied";
         }
@@ -37,7 +37,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
         if (reccord == null) {
             return "No such reccord";
         } else if(user.canUpdate(reccord)) {
-            reccord.setText(newText);
+            reccord.setMedicalData(newText);
             return "Updated reccord with id: " +reccord.getId();
         } else {
             return "Access denied";

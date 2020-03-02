@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.StringJoiner;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MedicalReccordControllerTest {
@@ -170,7 +168,7 @@ class MedicalReccordControllerTest {
         String response = sut.update(1, "New text");
 
         assertEquals("Updated reccord with id: 1", response);
-        assertEquals("New text", reccord.getText());
+        assertEquals("New text", reccord.getMedicalData());
     }
 
     @Test
@@ -184,7 +182,7 @@ class MedicalReccordControllerTest {
         String response = sut.update(2, "New text 2");
 
         assertEquals("Updated reccord with id: 2", response);
-        assertEquals("New text 2", reccord.getText());
+        assertEquals("New text 2", reccord.getMedicalData());
     }
 
     @Test
@@ -210,7 +208,7 @@ class MedicalReccordControllerTest {
         String response = sut.update(1, "New text");
 
         assertEquals("Access denied", response);
-        assertEquals("Old text", reccord.getText());
+        assertEquals("Old text", reccord.getMedicalData());
     }
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
