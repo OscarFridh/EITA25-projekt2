@@ -31,7 +31,7 @@ public class server implements Runnable {
     }
 
     private Router createRouter() {
-        User user = new Patient(1);
+        User user = new Government(2);
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
         repository.create(new Patient(1), "Medical reccord 1 for patient 1");
         repository.create(new Patient(1), "Medical reccord 2 for patient 1");
