@@ -9,7 +9,7 @@ class MedicalReccordControllerTest {
     @Test
     void readMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        repositoryMock.setFetchResult(new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1), "Medical reccord 1"));
+        repositoryMock.setFetchResult(new MedicalReccord(1, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Medical reccord 1"));
         UserMock userMock = new UserMock(1);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
@@ -22,7 +22,7 @@ class MedicalReccordControllerTest {
     @Test
     void readAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        repositoryMock.setFetchResult(new MedicalReccord(2, new Doctor(1, "Division"), new Patient(1), "Medical reccord 2"));
+        repositoryMock.setFetchResult(new MedicalReccord(2, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Medical reccord 2"));
         UserMock userMock = new UserMock(1);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
@@ -48,7 +48,7 @@ class MedicalReccordControllerTest {
     @Test
     void readMedicalReccordWithoutPermission() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        repositoryMock.setFetchResult(new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1), "Medical reccord 1"));
+        repositoryMock.setFetchResult(new MedicalReccord(1, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Medical reccord 1"));
         UserMock userMock = new UserMock(1);
         userMock.setCanRead(false);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
@@ -66,11 +66,12 @@ class MedicalReccordControllerTest {
         repositoryMock.setCreateResult(1);
         MedicalReccordController sut = new MedicalReccordController(new Doctor(1, "Division"), repositoryMock);
 
-        String response = sut.create(2, "Text");
+        String response = sut.create(2, 3, "Text");
 
         assertEquals("Created reccord with id: 1", response);
         assertEquals(1, repositoryMock.getLastCreateDoctorId());
         assertEquals(2, repositoryMock.getLastCreatePatientId());
+        assertEquals(3, repositoryMock.getLastCreatedNurseId());
         assertEquals("Text", repositoryMock.getLastCreateText());
     }
 
@@ -80,11 +81,12 @@ class MedicalReccordControllerTest {
         repositoryMock.setCreateResult(2);
         MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock);
 
-        String response = sut.create(3, "Text 2");
+        String response = sut.create(3, 4, "Text 2");
 
         assertEquals("Created reccord with id: 2", response);
         assertEquals(2, repositoryMock.getLastCreateDoctorId());
         assertEquals(3, repositoryMock.getLastCreatePatientId());
+        assertEquals(4, repositoryMock.getLastCreatedNurseId());
         assertEquals("Text 2", repositoryMock.getLastCreateText());
     }
 
@@ -96,10 +98,12 @@ class MedicalReccordControllerTest {
         userMock.setCanCreate(false);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
-        String response = sut.create(2, "Text");
+        String response = sut.create(2, 1, "Text");
 
         assertEquals("Access denied", response);
         assertNull(repositoryMock.getLastCreatePatientId());
+        assertNull(repositoryMock.getLastCreateDoctorId());
+        assertNull(repositoryMock.getLastCreatedNurseId());
         assertNull(repositoryMock.getLastCreateText());
     }
 
@@ -162,7 +166,7 @@ class MedicalReccordControllerTest {
     @Test
     void updateMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        MedicalReccord reccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1), "Old text");
+        MedicalReccord reccord = new MedicalReccord(1, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Old text");
         repositoryMock.setFetchResult(reccord);
         UserMock userMock = new UserMock(1);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
@@ -176,7 +180,7 @@ class MedicalReccordControllerTest {
     @Test
     void updateAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        MedicalReccord reccord = new MedicalReccord(2, new Doctor(1, "Division"), new Patient(1), "Old text");
+        MedicalReccord reccord = new MedicalReccord(2, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Old text");
         repositoryMock.setFetchResult(reccord);
         UserMock userMock = new UserMock(1);
         MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
@@ -201,7 +205,7 @@ class MedicalReccordControllerTest {
     @Test
     void updateMedicalReccordWithoutPermission() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        MedicalReccord reccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1), "Old text");
+        MedicalReccord reccord = new MedicalReccord(1, new Doctor(1, "Division"), new Nurse(1, "Division"), new Patient(1), "Old text");
         repositoryMock.setFetchResult(reccord);
         UserMock userMock = new UserMock(1);
         userMock.setCanUpdate(false);
@@ -221,6 +225,7 @@ class MedicalReccordControllerTest {
         private Integer createResult;
         private Integer lastCreatePatientId;
         private Integer lastCreatedDoctorId;
+        private Integer lastCreatedNurseId;
         private String lastCreateText;
 
         private Integer lastDelete;
@@ -232,6 +237,10 @@ class MedicalReccordControllerTest {
 
         public Integer getLastCreatePatientId() {
             return lastCreatePatientId;
+        }
+
+        public Integer getLastCreatedNurseId() {
+            return lastCreatedNurseId;
         }
 
         public Integer getLastCreateDoctorId() {
@@ -270,9 +279,10 @@ class MedicalReccordControllerTest {
         }
 
         @Override
-        public int create(Doctor doctor, Patient patient, String text) {
+        public int create(Doctor doctor, Nurse nurse, Patient patient, String text) {
             lastCreatePatientId = patient.getId();
             lastCreatedDoctorId = doctor.getId();
+            lastCreatedNurseId = nurse.getId();
             lastCreateText = text;
             return createResult;
         }

@@ -9,11 +9,12 @@ public class MedicalReccordController implements MedicalReccordControlling {
     }
 
     @Override
-    public String create(int patientId, String text) {
+    public String create(int patientId, int nurseId, String text) {
         if (user.canCreateMedicalReccord()) {
             Doctor doctor = (Doctor)user;
+            Nurse nurse = new Nurse(nurseId, doctor.getDivision());
             Patient patient = new Patient(patientId);
-            int id = repository.create(doctor, patient, text);
+            int id = repository.create(doctor, nurse, patient, text);
             return "Created reccord with id: " + id;
         } else {
             return "Access denied";

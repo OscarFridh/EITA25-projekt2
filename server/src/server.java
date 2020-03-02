@@ -31,12 +31,14 @@ public class server implements Runnable {
     }
 
     private Router createRouter() {
-        User user = new Government(2);
         Doctor doctor = new Doctor(1, "Division 1");
+        Nurse nurse = new Nurse(1, "Division 1");
+
+        User user = doctor;
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
-        repository.create(doctor, new Patient(1), "Medical reccord 1 for patient 1");
-        repository.create(doctor, new Patient(1), "Medical reccord 2 for patient 1");
-        repository.create(doctor, new Patient(2), "Medical reccord 1 for patient 2");
+        repository.create(doctor, nurse, new Patient(1), "Medical reccord 1 for patient 1");
+        repository.create(doctor, nurse, new Patient(1), "Medical reccord 2 for patient 1");
+        repository.create(doctor, nurse, new Patient(2), "Medical reccord 1 for patient 2");
         MedicalReccordController medicalReccordController = new MedicalReccordController(user, repository);
         return new Router(medicalReccordController);
     }

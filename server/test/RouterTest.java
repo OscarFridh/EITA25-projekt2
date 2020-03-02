@@ -264,7 +264,7 @@ class RouterTest {
         }
 
         @Override
-        public String create(int patientId, String text) {
+        public String create(int patientId, int nurseId, String text) {
             lastCreatedPatientId = patientId;
             lastCreatedText = text;
             return createResult;

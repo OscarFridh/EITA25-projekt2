@@ -2,12 +2,14 @@ public class MedicalReccord {
 
     private int id;
     private Doctor doctor;
+    private Nurse nurse;
     private Patient patient;
     private String medicalData;
 
-    public MedicalReccord(int id, Doctor doctor, Patient patient, String medicalData) {
+    public MedicalReccord(int id, Doctor doctor, Nurse nurse, Patient patient, String medicalData) {
         this.id = id;
         this.doctor = doctor;
+        this.nurse = nurse;
         this.patient = patient;
         this.medicalData = medicalData;
     }
@@ -18,6 +20,10 @@ public class MedicalReccord {
 
     public Doctor getDoctor() {
         return doctor;
+    }
+
+    public Nurse getNurse() {
+        return nurse;
     }
 
     public Patient getPatient() {

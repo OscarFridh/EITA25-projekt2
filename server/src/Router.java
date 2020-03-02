@@ -39,7 +39,7 @@ public class Router {
     private String create(String[] commands) {
         int patientId = Integer.parseInt(commands[1]);
         String text = parseMedicalReccordText(commands);
-        return medicalReccordController.create(patientId, text);
+        return medicalReccordController.create(patientId, 1, text);
     }
 
     private String parseMedicalReccordText(String[] commands) {
