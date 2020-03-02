@@ -1,6 +1,4 @@
 import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Router {
 
@@ -29,18 +27,13 @@ public class Router {
                 String text = joiner.toString();
                 return medicalReccordController.create(patientId, text);
 
+            } else {
+                return "Unknown command";
             }
         } catch (NumberFormatException e) {
             return "Invalid command";
         } catch (IndexOutOfBoundsException e) {
             return "Invalid command";
-        }
-
-        if(clientMsg.equals("Medical")) {
-            return "Medical Records";
-        }
-        else {
-            return new StringBuilder(clientMsg).reverse().toString();
         }
     }
 }

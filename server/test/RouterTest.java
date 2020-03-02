@@ -53,28 +53,6 @@ class RouterTest {
     }
 
     @Test
-    void handleRequestForMedicalReccords() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
-        medicalReccordControllerMock.setReadResult("Read result");
-        Router sut = new Router(medicalReccordControllerMock);
-
-        String actual = sut.handleRequest("Medical");
-
-        assertEquals("Medical Records", actual);
-    }
-
-    @Test
-    void handleAnotherRequest() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
-        medicalReccordControllerMock.setReadResult("Read result");
-        Router sut = new Router(medicalReccordControllerMock);
-
-        String actual = sut.handleRequest("abc");
-
-        assertEquals("cba", actual);
-    }
-
-    @Test
     void createMedicalReccord() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
         medicalReccordControllerMock.setCreateResult("Create result");
@@ -124,6 +102,16 @@ class RouterTest {
         assertEquals("Invalid command", actual);
         assertEquals(null, medicalReccordControllerMock.getLastCreatedPatientId());
         assertEquals(null, medicalReccordControllerMock.getLastCreatedText());
+    }
+
+    @Test
+    void unknownRequest() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("unknown");
+
+        assertEquals("Unknown command", actual);
     }
 
 
