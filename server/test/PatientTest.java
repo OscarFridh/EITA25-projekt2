@@ -13,42 +13,42 @@ class PatientTest {
     @Test
     void canReadMyReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertTrue(sut.canRead(medicalReccord));
     }
 
     @Test
     void cannotReadAnotherPatientsReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(2, new Patient(2),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(2, new Doctor(1, "Division"), new Patient(2),"Text");
         assertFalse(sut.canRead(medicalReccord));
     }
 
     @Test
     void cannotUpdateMyReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertFalse(sut.canUpdate(medicalReccord));
     }
 
     @Test
     void cannotUpdateAnotherPatientsReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(2, new Patient(2),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(2, new Doctor(1, "Division"), new Patient(2),"Text");
         assertFalse(sut.canUpdate(medicalReccord));
     }
 
     @Test
     void cannotDeleteMyReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertFalse(sut.canDelete(medicalReccord));
     }
 
     @Test
     void cannotDeleteAnotherPatientsReccord() {
         Patient sut = new Patient(1);
-        MedicalReccord medicalReccord = new MedicalReccord(2, new Patient(2),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(2, new Doctor(1, "Division"), new Patient(2),"Text");
         assertFalse(sut.canDelete(medicalReccord));
     }
 

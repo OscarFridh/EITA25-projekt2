@@ -23,7 +23,7 @@ class DoctorTest {
     @Test
     void cannotDelete() {
         Doctor sut = new Doctor(1, "Division 1");
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1), "Medical data");
+        MedicalReccord medicalReccord = new MedicalReccord(1, sut, new Patient(1), "Medical data");
         assertFalse(sut.canDelete(medicalReccord));
     }
 }

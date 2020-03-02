@@ -14,21 +14,21 @@ class GovernmentTest {
     @Test
     void canReadReccord() {
         Government sut = new Government(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertTrue(sut.canRead(medicalReccord));
     }
 
     @Test
     void cannotUpdateReccord() {
         Government sut = new Government(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertFalse(sut.canUpdate(medicalReccord));
     }
 
     @Test
     void canDeleteReccord() {
         Government sut = new Government(1);
-        MedicalReccord medicalReccord = new MedicalReccord(1, new Patient(1),"Text");
+        MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(1, "Division"), new Patient(1),"Text");
         assertTrue(sut.canDelete(medicalReccord));
     }
 }

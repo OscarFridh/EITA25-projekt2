@@ -14,8 +14,8 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
     }
 
     @Override
-    public int create(Patient patient, String text) {
-        MedicalReccord reccord = new MedicalReccord(Helper.generateUniqueId(), patient, text);
+    public int create(Doctor doctor, Patient patient, String text) {
+        MedicalReccord reccord = new MedicalReccord(Helper.generateUniqueId(), doctor, patient, text);
         medicalReccords.put(reccord.getId(), reccord);
         return reccord.getId();
     }
