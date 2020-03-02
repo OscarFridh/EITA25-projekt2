@@ -12,28 +12,15 @@ public class Router {
         try {
             String[] commands = clientMsg.split(" ");
 
-            if (clientMsg.startsWith("read")) {
-
-                int id = Integer.parseInt(commands[1]);
-                return medicalReccordController.read(id);
-
-            } else if (clientMsg.startsWith("create")) {
-
-                int patientId = Integer.parseInt(commands[1]);
-                StringJoiner joiner = new StringJoiner(" ");
-                for (int i = 2; i < commands.length; i++) {
-                    joiner.add(commands[i]);
-                }
-                String text = joiner.toString();
-                return medicalReccordController.create(patientId, text);
-
-            } else if(clientMsg.startsWith("delete")) {
-
-                int id = Integer.parseInt(commands[1]);
-                return medicalReccordController.delete(id);
-
-            } else {
-                return "Unknown command";
+            switch (commands[0]) {
+                case "read":
+                    return read(commands);
+                case "create":
+                    return create(commands);
+                case "delete":
+                    return delete(commands);
+                default:
+                    return "Unknown command";
             }
         } catch (NumberFormatException e) {
             return "Invalid command";
@@ -41,4 +28,25 @@ public class Router {
             return "Invalid command";
         }
     }
+
+    private String read(String[] commands) {
+        int id = Integer.parseInt(commands[1]);
+        return medicalReccordController.read(id);
+    }
+
+    private String create(String[] commands) {
+        int patientId = Integer.parseInt(commands[1]);
+        StringJoiner joiner = new StringJoiner(" ");
+        for (int i = 2; i < commands.length; i++) {
+            joiner.add(commands[i]);
+        }
+        String text = joiner.toString();
+        return medicalReccordController.create(patientId, text);
+    }
+
+    private String delete(String[] commands) {
+        int id = Integer.parseInt(commands[1]);
+        return medicalReccordController.delete(id);
+    }
+
 }
