@@ -31,8 +31,9 @@ public class server implements Runnable {
     }
 
     private Router createRouter() {
+        User user = null;
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
-        MedicalReccordController medicalReccordController = new MedicalReccordController(repository);
+        MedicalReccordController medicalReccordController = new MedicalReccordController(user, repository);
         return new Router(medicalReccordController);
     }
 

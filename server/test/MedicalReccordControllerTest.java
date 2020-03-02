@@ -10,7 +10,9 @@ class MedicalReccordControllerTest {
     void readMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setFetchResult(new MedicalReccord(1, "Medical reccord 1"));
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanRead(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.read(1);
 
@@ -22,7 +24,9 @@ class MedicalReccordControllerTest {
     void readAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setFetchResult(new MedicalReccord(2, "Medical reccord 2"));
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanRead(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.read(2);
 
@@ -34,7 +38,9 @@ class MedicalReccordControllerTest {
     void readNonExistingMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setFetchResult(null);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanRead(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.read(3);
 
@@ -46,7 +52,9 @@ class MedicalReccordControllerTest {
     void createMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(1);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanCreate(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.create(2, "Text");
 
@@ -59,7 +67,9 @@ class MedicalReccordControllerTest {
     void createAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(2);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanCreate(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.create(3, "Text 2");
 
@@ -72,7 +82,9 @@ class MedicalReccordControllerTest {
     void deleteMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setDeleteResult(true);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanDelete(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.delete(3);
 
@@ -85,7 +97,9 @@ class MedicalReccordControllerTest {
     void deleteAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setDeleteResult(true);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanDelete(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.delete(4);
 
@@ -98,7 +112,9 @@ class MedicalReccordControllerTest {
     void deleteNotExistingMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setDeleteResult(false);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanDelete(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.delete(5);
 
@@ -112,7 +128,9 @@ class MedicalReccordControllerTest {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         MedicalReccord reccord = new MedicalReccord(1, "Old text");
         repositoryMock.setFetchResult(reccord);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanUpdate(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.update(1, "New text");
 
@@ -125,7 +143,9 @@ class MedicalReccordControllerTest {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         MedicalReccord reccord = new MedicalReccord(2, "Old text");
         repositoryMock.setFetchResult(reccord);
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanUpdate(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.update(2, "New text 2");
 
@@ -136,7 +156,9 @@ class MedicalReccordControllerTest {
     @Test
     void updateNonExistingMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+        UserMock userMock = new UserMock(1, repositoryMock);
+        userMock.setCanUpdate(true);
+        MedicalReccordController sut = new MedicalReccordController(userMock, repositoryMock);
 
         String response = sut.update(2, "New text 2");
 
@@ -199,6 +221,54 @@ class MedicalReccordControllerTest {
         public boolean delete(int id) {
             lastDelete = id;
             return deleteResult;
+        }
+    }
+
+    class UserMock extends User {
+
+        private boolean canCreate = false;
+        private boolean canRead = false;
+        private boolean canUpdate = false;
+        private boolean canDelete = false;
+
+        public UserMock(int id, MedicalReccordRepository medicalReccordRepository) {
+            super(id, medicalReccordRepository);
+        }
+
+        public void setCanCreate(boolean canCreate) {
+            this.canCreate = canCreate;
+        }
+
+        public void setCanRead(boolean canRead) {
+            this.canRead = canRead;
+        }
+
+        public void setCanUpdate(boolean canUpdate) {
+            this.canUpdate = canUpdate;
+        }
+
+        public void setCanDelete(boolean canDelete) {
+            this.canDelete = canDelete;
+        }
+
+        @Override
+        public boolean canCreateMedicalReccord() {
+            return canCreate;
+        }
+
+        @Override
+        public boolean canRead(MedicalReccord medicalReccord) {
+            return canRead;
+        }
+
+        @Override
+        public boolean canUpdate(MedicalReccord medicalReccord) {
+            return canUpdate;
+        }
+
+        @Override
+        public boolean canDelete(MedicalReccord medicalReccord) {
+            return canDelete;
         }
     }
 }

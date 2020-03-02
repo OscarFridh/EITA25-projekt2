@@ -1,8 +1,10 @@
 public class MedicalReccordController implements MedicalReccordControlling {
 
+    private User user;
     private MedicalReccordRepository repository;
 
-    public MedicalReccordController(MedicalReccordRepository repository) {
+    public MedicalReccordController(User user, MedicalReccordRepository repository) {
+        this.user = user;
         this.repository = repository;
     }
 
