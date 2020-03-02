@@ -3,7 +3,6 @@ import java.util.HashMap;
 public class InMemoryMedicalReccordRepository implements MedicalReccordRepository {
 
     private HashMap<Integer, MedicalReccord> medicalReccords;
-    private static int idCounter = 1;
 
     public InMemoryMedicalReccordRepository() {
         this.medicalReccords = new HashMap();
@@ -20,13 +19,9 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
 
     @Override
     public int create(int patientId, String text) {
-        MedicalReccord reccord = new MedicalReccord(nextId(), text);
+        MedicalReccord reccord = new MedicalReccord(Helper.generateUniqueId(), text);
         add(reccord);
         return reccord.getId();
-    }
-
-    private static int nextId() {
-        return idCounter++;
     }
 
     @Override
