@@ -13,10 +13,12 @@ public class Router {
             String[] commands = clientMsg.split(" ");
 
             switch (commands[0]) {
-                case "read":
-                    return read(commands);
                 case "create":
                     return create(commands);
+                case "read":
+                    return read(commands);
+                case "update":
+                    return update(commands);
                 case "delete":
                     return delete(commands);
                 default:
@@ -36,12 +38,22 @@ public class Router {
 
     private String create(String[] commands) {
         int patientId = Integer.parseInt(commands[1]);
+        String text = parseMedicalReccordText(commands);
+        return medicalReccordController.create(patientId, text);
+    }
+
+    private String parseMedicalReccordText(String[] commands) {
         StringJoiner joiner = new StringJoiner(" ");
         for (int i = 2; i < commands.length; i++) {
             joiner.add(commands[i]);
         }
-        String text = joiner.toString();
-        return medicalReccordController.create(patientId, text);
+        return joiner.toString();
+    }
+
+    private String update(String[] commands) {
+        int id = Integer.parseInt(commands[1]);
+        String newText = parseMedicalReccordText(commands);
+        return medicalReccordController.update(id, newText);
     }
 
     private String delete(String[] commands) {

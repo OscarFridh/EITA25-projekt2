@@ -153,6 +153,58 @@ class RouterTest {
     }
 
     @Test
+    void testUpdateMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setUpdateResult("Updated medical reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("update 1 New text");
+
+        assertEquals("Updated medical reccord", actual);
+        assertEquals(1, medicalReccordControllerMock.getLastUpdateId());
+        assertEquals("New text", medicalReccordControllerMock.getLastUpdateText());
+    }
+
+    @Test
+    void testUpdateAnotherMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setUpdateResult("Updated another medical reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("update 2 New text 2");
+
+        assertEquals("Updated another medical reccord", actual);
+        assertEquals(2, medicalReccordControllerMock.getLastUpdateId());
+        assertEquals("New text 2", medicalReccordControllerMock.getLastUpdateText());
+    }
+
+    @Test
+    void updateRequestWithoutParameters() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setUpdateResult("Updated medical reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("update");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastUpdateId());
+        assertEquals(null, medicalReccordControllerMock.getLastUpdateText());
+    }
+
+    @Test
+    void updateRequestWithInvalidId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setUpdateResult("Updated medical reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("update x text");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastUpdateId());
+        assertEquals(null, medicalReccordControllerMock.getLastUpdateText());
+    }
+
+    @Test
     void unknownRequest() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
         Router sut = new Router(medicalReccordControllerMock);
@@ -165,12 +217,16 @@ class RouterTest {
 
     class MedicalReccordControllerMock implements MedicalReccordControlling {
 
-        private  Integer lastRead;
-        private String readResult;
-
         private Integer lastCreatedPatientId;
         private String lastCreatedText;
         private String createResult;
+
+        private  Integer lastRead;
+        private String readResult;
+
+        private Integer lastUpdateId;
+        private String lastUpdateText;
+        private String updateResult;
 
         private Integer lastDelete;
         String deleteResult;
@@ -183,6 +239,9 @@ class RouterTest {
         }
         public void setDeleteResult(String deleteResult) {
             this.deleteResult = deleteResult;
+        }
+        public void setUpdateResult(String updateResult) {
+            this.updateResult = updateResult;
         }
 
         public Integer getLastRead() {
@@ -197,6 +256,19 @@ class RouterTest {
         public Integer getLastDelete() {
             return lastDelete;
         }
+        public Integer getLastUpdateId() {
+            return lastUpdateId;
+        }
+        public String getLastUpdateText() {
+            return lastUpdateText;
+        }
+
+        @Override
+        public String create(int patientId, String text) {
+            lastCreatedPatientId = patientId;
+            lastCreatedText = text;
+            return createResult;
+        }
 
         @Override
         public String read(int id) {
@@ -205,10 +277,10 @@ class RouterTest {
         }
 
         @Override
-        public String create(int patientId, String text) {
-            lastCreatedPatientId = patientId;
-            lastCreatedText = text;
-            return createResult;
+        public String update(int id, String newText) {
+            lastUpdateId = id;
+            lastUpdateText = newText;
+            return updateResult;
         }
 
         @Override

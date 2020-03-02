@@ -7,6 +7,12 @@ public class MedicalReccordController implements MedicalReccordControlling {
     }
 
     @Override
+    public String create(int patientId, String text) {
+        int id = repository.create(patientId, text);
+        return "Created reccord with id: " + id;
+    }
+
+    @Override
     public String read(int id) {
         MedicalReccord result = repository.fetchMedicalReccord(id);
         if (result == null) {
@@ -17,9 +23,8 @@ public class MedicalReccordController implements MedicalReccordControlling {
     }
 
     @Override
-    public String create(int patientId, String text) {
-        int id = repository.create(patientId, text);
-        return "Created reccord with id: " + id;
+    public String update(int id, String newText) {
+        return null;
     }
 
     @Override
