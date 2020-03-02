@@ -10,8 +10,12 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String create(int patientId, String text) {
-        int id = repository.create(patientId, text);
-        return "Created reccord with id: " + id;
+        if (user.canCreateMedicalReccord()) {
+            int id = repository.create(patientId, text);
+            return "Created reccord with id: " + id;
+        } else {
+            return "Access denied";
+        }
     }
 
     @Override
@@ -19,8 +23,10 @@ public class MedicalReccordController implements MedicalReccordControlling {
         MedicalReccord result = repository.get(id);
         if (result == null) {
             return "No such reccord";
-        } else {
+        } else if (user.canRead(result)) {
             return result.getText();
+        } else {
+            return "Access denied";
         }
     }
 
@@ -29,15 +35,20 @@ public class MedicalReccordController implements MedicalReccordControlling {
         MedicalReccord reccord = repository.get(id);
         if (reccord == null) {
             return "No such reccord";
-        } else {
+        } else if(user.canUpdate(reccord)) {
             reccord.setText(newText);
             return "Updated reccord with id: " +reccord.getId();
+        } else {
+            return "Access denied";
         }
     }
 
     @Override
     public String delete(int id) {
-        if (repository.delete(id)) {
+        MedicalReccord reccord = repository.get(id);
+        if (!user.canDelete(reccord)) {
+            return "Access denied";
+        } else if (repository.delete(id)) {
             return "Deleted reccord with id: " + id;
         } else {
             return "Could not delete reccord with id: " + id;
