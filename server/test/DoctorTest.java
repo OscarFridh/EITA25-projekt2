@@ -25,7 +25,7 @@ class DoctorTest {
     }
 
     @Test
-    void canReadReccordFromAnotherDivision() {
+    void cannotReadReccordFromAnotherDivision() {
         Doctor sut = new Doctor(1, "Division 1");
         MedicalReccord medicalReccord = new MedicalReccord(1, new Doctor(2, "Division 2"), new Nurse(1, "Division 1"), new Patient(1), "Medical data");
         assertFalse(sut.canRead(medicalReccord));

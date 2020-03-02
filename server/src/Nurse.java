@@ -10,4 +10,14 @@ public class Nurse extends User {
     public String getDivision() {
         return division;
     }
+
+    @Override
+    public boolean canRead(MedicalReccord medicalReccord) {
+        return medicalReccord.getDoctor().getDivision().equals(getDivision());
+    }
+
+    @Override
+    public boolean canUpdate(MedicalReccord medicalReccord) {
+        return (medicalReccord.getNurse().getId() == getId());
+    }
 }
