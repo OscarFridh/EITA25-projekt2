@@ -107,6 +107,42 @@ class MedicalReccordControllerTest {
         assertFalse(repositoryMock.getLastDeleteResult());
     }
 
+    @Test
+    void updateMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        MedicalReccord reccord = new MedicalReccord(1, "Old text");
+        repositoryMock.setFetchResult(reccord);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.update(1, "New text");
+
+        assertEquals("Updated reccord with id: 1", response);
+        assertEquals("New text", reccord.getText());
+    }
+
+    @Test
+    void updateAnotherMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        MedicalReccord reccord = new MedicalReccord(2, "Old text");
+        repositoryMock.setFetchResult(reccord);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.update(2, "New text 2");
+
+        assertEquals("Updated reccord with id: 2", response);
+        assertEquals("New text 2", reccord.getText());
+    }
+
+    @Test
+    void updateNonExistingMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.update(2, "New text 2");
+
+        assertEquals("No such reccord", response);
+    }
+
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 

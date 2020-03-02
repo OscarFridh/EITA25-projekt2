@@ -24,7 +24,13 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String update(int id, String newText) {
-        return null;
+        MedicalReccord reccord = repository.get(id);
+        if (reccord == null) {
+            return "No such reccord";
+        } else {
+            reccord.setText(newText);
+            return "Updated reccord with id: " +reccord.getId();
+        }
     }
 
     @Override
