@@ -55,11 +55,11 @@ create_keystore() {
 
 add_client_keystores() {
   cd "$OUTPUT_DIR"
-  mkdir -p "$CLIENT_RESOURCES"
+  mkdir -p "$CLIENT_RESOURCES/$1"
   create_truststore clienttruststore
-  mv clienttruststore "$CLIENT_RESOURCES/clienttruststore"
-  create_keystore clientkeystore "CN=3"
-  mv clientkeystore "$CLIENT_RESOURCES/clientkeystore"
+  mv clienttruststore "$CLIENT_RESOURCES/$1/truststore"
+  create_keystore clientkeystore "CN=$1"
+  mv clientkeystore "$CLIENT_RESOURCES/$1/keystore"
 }
 
 add_server_keystores() {
@@ -79,7 +79,10 @@ cd "$OUTPUT_DIR"
 create_ca
 
 # Clients
-add_client_keystores # TODO: Create multiple clients and inject DName
+for i in {1..7}
+do
+   add_client_keystores $i
+done
 
 # Server
 add_server_keystores

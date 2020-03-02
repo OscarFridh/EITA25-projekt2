@@ -9,8 +9,10 @@ import java.util.HashMap;
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
+    private InMemoryMedicalReccordRepository repository;
 
     public server(ServerSocket ss) throws IOException {
+        repository = new InMemoryMedicalReccordRepository();
         serverSocket = ss;
         newListener();
     }
@@ -27,12 +29,6 @@ public class server implements Runnable {
         return map.get(id);
     }
 
-    private Router createRouter(User user) {
-        InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
-        MedicalReccordController medicalReccordController = new MedicalReccordController(user, repository);
-        return new Router(medicalReccordController);
-    }
-
     public void run() {
         try {
             SSLSocket socket=(SSLSocket)serverSocket.accept();
@@ -43,7 +39,7 @@ public class server implements Runnable {
             String subject = cert.getSubjectDN().getName(); // CN=...
             int certificateId = Integer.parseInt(subject.substring(3));
             User user = authenticateUser(certificateId);
-            Router router = createRouter(user);
+            Router router = new Router(new MedicalReccordController(user, repository));
 
             PrintWriter out = null;
             BufferedReader in = null;
