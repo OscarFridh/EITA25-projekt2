@@ -1,5 +1,5 @@
 public interface MedicalReccordRepository {
     MedicalReccord get(int id);
-    int create(int patientId, String text);
+    int create(Patient patient, String text);
     boolean delete(int id);
 }

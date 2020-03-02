@@ -11,8 +11,8 @@ class InMemoryMedicalReccordRepositoryTest {
         InMemoryMedicalReccordRepository sut = new InMemoryMedicalReccordRepository();
 
         // When
-        int firstId = sut.create(1, "Medical reccord 1");
-        int secondId = sut.create(1, "Medical reccord 2");
+        int firstId = sut.create(new Patient(1), "Medical reccord 1");
+        int secondId = sut.create(new Patient(1), "Medical reccord 2");
 
         MedicalReccord fetch1 = sut.get(firstId);
         MedicalReccord fetch2 = sut.get(secondId);
@@ -35,7 +35,7 @@ class InMemoryMedicalReccordRepositoryTest {
         InMemoryMedicalReccordRepository sut = new InMemoryMedicalReccordRepository();
 
         // When
-        int id = sut.create(1, "Medical reccord 1");
+        int id = sut.create(new Patient(1), "Medical reccord 1");
         assertFalse(sut.delete(id+1));
         assertTrue(sut.delete(id));
 

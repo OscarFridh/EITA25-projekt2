@@ -1,15 +1,13 @@
 public abstract class User {
 
     private int id;
-    private MedicalReccordRepository medicalReccordRepository;
 
-    public User(int id, MedicalReccordRepository medicalReccordRepository) {
+    public User(int id) {
         this.id = id;
-        this.medicalReccordRepository = medicalReccordRepository;
     }
 
-    protected MedicalReccordRepository getMedicalReccordRepository() {
-        return medicalReccordRepository;
+    public int getId() {
+        return id;
     }
 
     public boolean canCreateMedicalReccord() {
