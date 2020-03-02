@@ -15,4 +15,9 @@ public class MedicalReccordController implements MedicalReccordControlling {
             return result.getText();
         }
     }
+
+    @Override
+    public String create(int patientId, String text) {
+        return "";
+    }
 }

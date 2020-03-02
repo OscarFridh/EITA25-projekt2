@@ -59,5 +59,10 @@ class MedicalReccordControllerTest {
         public void setFetchResult(MedicalReccord fetchResult) {
             this.fetchResult = fetchResult;
         }
+
+        @Override
+        public int create(int patientId, String text) {
+            return 0;
+        }
     }
 }

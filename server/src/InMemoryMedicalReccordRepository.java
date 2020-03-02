@@ -17,5 +17,8 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
         medicalReccords.put(reccord.getId(), reccord);
     }
 
-
+    @Override
+    public int create(int patientId, String text) {
+        return 0;
+    }
 }

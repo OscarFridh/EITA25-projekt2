@@ -6,7 +6,8 @@ class RouterTest {
 
     @Test
     void readMedicalReccord() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read 1");
@@ -17,7 +18,8 @@ class RouterTest {
 
     @Test
     void readAnotherMedicalReccord() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Another read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read 2");
@@ -28,7 +30,8 @@ class RouterTest {
 
     @Test
     void readMedicalReccordWithoutSpecifyingId() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Another read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read");
@@ -39,7 +42,8 @@ class RouterTest {
 
     @Test
     void readMedicalReccordWithInvalidId() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Another read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Another read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String response = sut.handleRequest("read x");
@@ -50,7 +54,8 @@ class RouterTest {
 
     @Test
     void handleRequestForMedicalReccords() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("Medical");
@@ -60,7 +65,8 @@ class RouterTest {
 
     @Test
     void handleAnotherRequest() {
-        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock("Read result");
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setReadResult("Read result");
         Router sut = new Router(medicalReccordControllerMock);
 
         String actual = sut.handleRequest("abc");
@@ -68,7 +74,57 @@ class RouterTest {
         assertEquals("cba", actual);
     }
 
+    @Test
+    void createMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setCreateResult("Create result");
+        Router sut = new Router(medicalReccordControllerMock);
 
+        String actual = sut.handleRequest("create 1 Medical reccord for patient 1");
+
+        assertEquals("Create result", actual);
+        assertEquals(1, medicalReccordControllerMock.getLastCreatedPatientId());
+        assertEquals("Medical reccord for patient 1", medicalReccordControllerMock.getLastCreatedText());
+    }
+
+    @Test
+    void createAnotherMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setCreateResult("Another create result");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("create 2 Medical reccord for patient 2");
+
+        assertEquals("Another create result", actual);
+        assertEquals(2, medicalReccordControllerMock.getLastCreatedPatientId());
+        assertEquals("Medical reccord for patient 2", medicalReccordControllerMock.getLastCreatedText());
+    }
+
+    @Test
+    void createRequestWithoutParameters() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setCreateResult("Create result");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("create");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastCreatedPatientId());
+        assertEquals(null, medicalReccordControllerMock.getLastCreatedText());
+    }
+
+    @Test
+    void createRequestWithInvalidId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setCreateResult("Create result");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("create x text");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastCreatedPatientId());
+        assertEquals(null, medicalReccordControllerMock.getLastCreatedText());
+    }
 
 
     class MedicalReccordControllerMock implements MedicalReccordControlling {
@@ -76,18 +132,39 @@ class RouterTest {
         private  Integer lastRead;
         private String readResult;
 
-        public MedicalReccordControllerMock(String readResult) {
+        private Integer lastCreatedPatientId;
+        private String lastCreatedText;
+        private String createResult;
+
+        public void setReadResult(String readResult) {
             this.readResult = readResult;
+        }
+
+        public void setCreateResult(String createResult) {
+            this.createResult = createResult;
         }
 
         public Integer getLastRead() {
             return lastRead;
+        }
+        public Integer getLastCreatedPatientId() {
+            return lastCreatedPatientId;
+        }
+        public String getLastCreatedText() {
+            return lastCreatedText;
         }
 
         @Override
         public String read(int id) {
             lastRead = id;
             return readResult;
+        }
+
+        @Override
+        public String create(int patientId, String text) {
+            lastCreatedPatientId = patientId;
+            lastCreatedText = text;
+            return createResult;
         }
     }
 }
