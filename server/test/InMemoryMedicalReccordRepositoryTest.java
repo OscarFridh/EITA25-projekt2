@@ -26,4 +26,19 @@ class InMemoryMedicalReccordRepositoryTest {
 
         assertNull(fetch3);
     }
+
+    @Test
+    void testDelete() {
+
+        // Given
+        InMemoryMedicalReccordRepository sut = new InMemoryMedicalReccordRepository();
+
+        // When
+        sut.add(new MedicalReccord(1, "Medical reccord 1"));
+        assertTrue(sut.delete(1));
+        assertFalse(sut.delete(2));
+
+        // Then
+        assertNull(sut.fetchMedicalReccord(1));
+    }
 }

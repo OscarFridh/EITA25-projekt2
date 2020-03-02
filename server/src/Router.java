@@ -27,6 +27,11 @@ public class Router {
                 String text = joiner.toString();
                 return medicalReccordController.create(patientId, text);
 
+            } else if(clientMsg.startsWith("delete")) {
+
+                int id = Integer.parseInt(commands[1]);
+                return medicalReccordController.delete(id);
+
             } else {
                 return "Unknown command";
             }

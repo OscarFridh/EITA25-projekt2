@@ -105,6 +105,54 @@ class RouterTest {
     }
 
     @Test
+    void deleteMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setDeleteResult("Deleted reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("delete 1");
+
+        assertEquals("Deleted reccord", actual);
+        assertEquals(1, medicalReccordControllerMock.getLastDelete());
+    }
+
+    @Test
+    void deleteAnotherMedicalReccord() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setDeleteResult("Deleted another reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("delete 2");
+
+        assertEquals("Deleted another reccord", actual);
+        assertEquals(2, medicalReccordControllerMock.getLastDelete());
+    }
+
+    @Test
+    void deleteRequestWithoutId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setDeleteResult("Deleted reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("delete");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastDelete());
+    }
+
+    @Test
+    void deleteRequestWithInvalidId() {
+        MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
+        medicalReccordControllerMock.setDeleteResult("Deleted reccord");
+        Router sut = new Router(medicalReccordControllerMock);
+
+        String actual = sut.handleRequest("delete x");
+
+        assertEquals("Invalid command", actual);
+        assertEquals(null, medicalReccordControllerMock.getLastDelete());
+    }
+
+    @Test
     void unknownRequest() {
         MedicalReccordControllerMock medicalReccordControllerMock = new MedicalReccordControllerMock();
         Router sut = new Router(medicalReccordControllerMock);
@@ -124,12 +172,17 @@ class RouterTest {
         private String lastCreatedText;
         private String createResult;
 
+        private Integer lastDelete;
+        String deleteResult;
+
         public void setReadResult(String readResult) {
             this.readResult = readResult;
         }
-
         public void setCreateResult(String createResult) {
             this.createResult = createResult;
+        }
+        public void setDeleteResult(String deleteResult) {
+            this.deleteResult = deleteResult;
         }
 
         public Integer getLastRead() {
@@ -140,6 +193,9 @@ class RouterTest {
         }
         public String getLastCreatedText() {
             return lastCreatedText;
+        }
+        public Integer getLastDelete() {
+            return lastDelete;
         }
 
         @Override
@@ -153,6 +209,12 @@ class RouterTest {
             lastCreatedPatientId = patientId;
             lastCreatedText = text;
             return createResult;
+        }
+
+        @Override
+        public String delete(int id) {
+            lastDelete = id;
+            return deleteResult;
         }
     }
 }

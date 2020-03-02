@@ -28,4 +28,9 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
     private static int nextId() {
         return idCounter++;
     }
+
+    @Override
+    public boolean delete(int id) {
+        return (medicalReccords.remove(id) != null);
+    }
 }

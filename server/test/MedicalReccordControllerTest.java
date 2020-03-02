@@ -68,6 +68,45 @@ class MedicalReccordControllerTest {
         assertEquals("Text 2", repositoryMock.getLastCreateText());
     }
 
+    @Test
+    void deleteMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setDeleteResult(true);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.delete(3);
+
+        assertEquals("Deleted reccord with id: 3", response);
+        assertEquals(3, repositoryMock.getLastDelete());
+        assertTrue(repositoryMock.getLastDeleteResult());
+    }
+
+    @Test
+    void deleteAnotherMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setDeleteResult(true);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.delete(4);
+
+        assertEquals("Deleted reccord with id: 4", response);
+        assertEquals(4, repositoryMock.getLastDelete());
+        assertTrue(repositoryMock.getLastDeleteResult());
+    }
+
+    @Test
+    void deleteNotExistingMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setDeleteResult(false);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.delete(5);
+
+        assertEquals("Could not delete reccord with id: 5", response);
+        assertEquals(5, repositoryMock.getLastDelete());
+        assertFalse(repositoryMock.getLastDeleteResult());
+    }
+
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 
@@ -78,6 +117,9 @@ class MedicalReccordControllerTest {
         private Integer lastCreatePatientId;
         private String lastCreateText;
 
+        private Integer lastDelete;
+        private boolean deleteResult;
+
         public Integer getLastFetch() {
             return lastFetch;
         }
@@ -87,12 +129,21 @@ class MedicalReccordControllerTest {
         public String getLastCreateText() {
             return lastCreateText;
         }
+        public Integer getLastDelete() {
+            return lastDelete;
+        }
+        public boolean getLastDeleteResult() {
+            return deleteResult;
+        }
 
         public void setFetchResult(MedicalReccord fetchResult) {
             this.fetchResult = fetchResult;
         }
         public void setCreateResult(Integer createResult) {
             this.createResult = createResult;
+        }
+        public void setDeleteResult(boolean deleteResult) {
+            this.deleteResult = deleteResult;
         }
 
         @Override
@@ -106,6 +157,12 @@ class MedicalReccordControllerTest {
             lastCreatePatientId = patientId;
             lastCreateText = text;
             return createResult;
+        }
+
+        @Override
+        public boolean delete(int id) {
+            lastDelete = id;
+            return deleteResult;
         }
     }
 }

@@ -21,4 +21,13 @@ public class MedicalReccordController implements MedicalReccordControlling {
         int id = repository.create(patientId, text);
         return "Created reccord with id: " + id;
     }
+
+    @Override
+    public String delete(int id) {
+        if (repository.delete(id)) {
+            return "Deleted reccord with id: " + id;
+        } else {
+            return "Could not delete reccord with id: " + id;
+        }
+    }
 }
