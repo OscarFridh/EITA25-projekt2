@@ -11,19 +11,16 @@ public class Router {
     }
 
     public String handleRequest(String clientMsg) {
-        if (clientMsg.startsWith("read")) {
+        try {
             String[] commands = clientMsg.split(" ");
-            try {
+
+            if (clientMsg.startsWith("read")) {
+
                 int id = Integer.parseInt(commands[1]);
                 return medicalReccordController.read(id);
-            } catch (NumberFormatException e) {
-                return "Invalid command";
-            } catch (IndexOutOfBoundsException e) {
-                return "Invalid command";
-            }
-        } else if (clientMsg.startsWith("create")) {
-            try {
-                String[] commands = clientMsg.split(" ");
+
+            } else if (clientMsg.startsWith("create")) {
+
                 int patientId = Integer.parseInt(commands[1]);
                 StringJoiner joiner = new StringJoiner(" ");
                 for (int i = 2; i < commands.length; i++) {
@@ -31,12 +28,14 @@ public class Router {
                 }
                 String text = joiner.toString();
                 return medicalReccordController.create(patientId, text);
-            } catch (NumberFormatException e) {
-                return "Invalid command";
-            } catch (IndexOutOfBoundsException e) {
-                return "Invalid command";
+
             }
+        } catch (NumberFormatException e) {
+            return "Invalid command";
+        } catch (IndexOutOfBoundsException e) {
+            return "Invalid command";
         }
+
         if(clientMsg.equals("Medical")) {
             return "Medical Records";
         }
