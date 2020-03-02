@@ -18,6 +18,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String create(int patientId, String text) {
-        return "";
+        int id = repository.create(patientId, text);
+        return "Created reccord with id: " + id;
     }
 }

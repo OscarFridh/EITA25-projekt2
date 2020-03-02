@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.StringJoiner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MedicalReccordControllerTest {
@@ -40,11 +42,58 @@ class MedicalReccordControllerTest {
         assertEquals(3, repositoryMock.lastFetch);
     }
 
+    @Test
+    void createMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setCreateResult(1);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.create(2, "Text");
+
+        assertEquals("Created reccord with id: 1", response);
+        assertEquals(2, repositoryMock.getLastCreatePatientId());
+        assertEquals("Text", repositoryMock.getLastCreateText());
+    }
+
+    @Test
+    void createAnotherMedicalReccord() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setCreateResult(2);
+        MedicalReccordController sut = new MedicalReccordController(repositoryMock);
+
+        String response = sut.create(3, "Text 2");
+
+        assertEquals("Created reccord with id: 2", response);
+        assertEquals(3, repositoryMock.getLastCreatePatientId());
+        assertEquals("Text 2", repositoryMock.getLastCreateText());
+    }
+
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 
         private MedicalReccord fetchResult;
         private Integer lastFetch;
+
+        private Integer createResult;
+        private Integer lastCreatePatientId;
+        private String lastCreateText;
+
+        public Integer getLastFetch() {
+            return lastFetch;
+        }
+        public Integer getLastCreatePatientId() {
+            return lastCreatePatientId;
+        }
+        public String getLastCreateText() {
+            return lastCreateText;
+        }
+
+        public void setFetchResult(MedicalReccord fetchResult) {
+            this.fetchResult = fetchResult;
+        }
+        public void setCreateResult(Integer createResult) {
+            this.createResult = createResult;
+        }
 
         @Override
         public MedicalReccord fetchMedicalReccord(int id) {
@@ -52,17 +101,11 @@ class MedicalReccordControllerTest {
             return fetchResult;
         }
 
-        public Integer getLastFetch() {
-            return lastFetch;
-        }
-
-        public void setFetchResult(MedicalReccord fetchResult) {
-            this.fetchResult = fetchResult;
-        }
-
         @Override
         public int create(int patientId, String text) {
-            return 0;
+            lastCreatePatientId = patientId;
+            lastCreateText = text;
+            return createResult;
         }
     }
 }
