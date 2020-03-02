@@ -13,14 +13,10 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
         return medicalReccords.get(id);
     }
 
-    public void add(MedicalReccord reccord) {
-        medicalReccords.put(reccord.getId(), reccord);
-    }
-
     @Override
     public int create(int patientId, String text) {
         MedicalReccord reccord = new MedicalReccord(Helper.generateUniqueId(), text);
-        add(reccord);
+        medicalReccords.put(reccord.getId(), reccord);
         return reccord.getId();
     }
 
