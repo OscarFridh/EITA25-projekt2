@@ -147,7 +147,7 @@ class MedicalReccordControllerTest {
         }
 
         @Override
-        public MedicalReccord fetchMedicalReccord(int id) {
+        public MedicalReccord get(int id) {
             lastFetch = id;
             return fetchResult;
         }

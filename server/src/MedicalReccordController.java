@@ -14,7 +14,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String read(int id) {
-        MedicalReccord result = repository.fetchMedicalReccord(id);
+        MedicalReccord result = repository.get(id);
         if (result == null) {
             return "No such reccord";
         } else {

@@ -10,7 +10,7 @@ public class InMemoryMedicalReccordRepository implements MedicalReccordRepositor
     }
 
     @Override
-    public MedicalReccord fetchMedicalReccord(int id) {
+    public MedicalReccord get(int id) {
         return medicalReccords.get(id);
     }
 
