@@ -4,41 +4,31 @@ import java.security.KeyStore;
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
-import java.math.BigInteger;
-import java.util.Hashtable;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
 
-    private static Hashtable<String, ArrayList<String>> medicalRecords;
-    private static ArrayList<String> doctorList;
-
-    private Router router;
-
     public server(ServerSocket ss) throws IOException {
-        medicalRecords = new Hashtable<String, ArrayList<String>>();
-        doctorList = new ArrayList<String>();
-        doctorList.add("Doctor");
-        doctorList.add("info1");
-        medicalRecords.put("CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE", doctorList);
         serverSocket = ss;
-
-        router = createRouter();
-
         newListener();
     }
 
-    private Router createRouter() {
-        Doctor doctor = new Doctor(1, "Division 1");
-        Nurse nurse = new Nurse(1, "Division 1");
+    private User authenticateUser(int id) {
+        HashMap<Integer, User> map = new HashMap();
+        map.put(1, new Patient(1));
+        map.put(2, new Patient(2));
+        map.put(3, new Doctor(3, "Division 1"));
+        map.put(4, new Doctor(4, "Division 2"));
+        map.put(5, new Nurse(5, "Division 1"));
+        map.put(6, new Nurse(6, "Division 2"));
+        map.put(7, new Government(7));
+        return map.get(id);
+    }
 
-        User user = doctor;
+    private Router createRouter(User user) {
         InMemoryMedicalReccordRepository repository = new InMemoryMedicalReccordRepository();
-        repository.create(doctor, nurse, new Patient(1), "Medical reccord 1 for patient 1");
-        repository.create(doctor, nurse, new Patient(1), "Medical reccord 2 for patient 1");
-        repository.create(doctor, nurse, new Patient(2), "Medical reccord 1 for patient 2");
         MedicalReccordController medicalReccordController = new MedicalReccordController(user, repository);
         return new Router(medicalReccordController);
     }
@@ -49,18 +39,11 @@ public class server implements Runnable {
             newListener();
             SSLSession session = socket.getSession();
             X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
-            String subject = cert.getSubjectDN().getName();
-            String issuer = cert.getIssuerDN().getName();
-            BigInteger serial = cert.getSerialNumber();
-            String title = medicalRecords.get(subject).get(0);
-    	    numConnectedClients++;
-            System.out.println("client connected");
-            System.out.println("client name (cert subject DN field): " + subject);
-            System.out.println("certificate issuer:\n" + issuer + "\n");
-            System.out.println("certificate serial number:\n" + serial + "\n");
-            System.out.println("Titel = " + title);
-            System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
+            String subject = cert.getSubjectDN().getName(); // CN=...
+            int certificateId = Integer.parseInt(subject.substring(3));
+            User user = authenticateUser(certificateId);
+            Router router = createRouter(user);
 
             PrintWriter out = null;
             BufferedReader in = null;

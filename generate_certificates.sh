@@ -58,7 +58,7 @@ add_client_keystores() {
   mkdir -p "$CLIENT_RESOURCES"
   create_truststore clienttruststore
   mv clienttruststore "$CLIENT_RESOURCES/clienttruststore"
-  create_keystore clientkeystore "CN=Oscar Fridh (os5614fr-s)/Filip Myhrén (fi8057my-s)/Lucas Edlund (lu6512ed-s)/Nils Stridbeck (ni8280st-s), OU=LTH, O=LTH, L=Lund, ST=SE, C=SE"
+  create_keystore clientkeystore "CN=3"
   mv clientkeystore "$CLIENT_RESOURCES/clientkeystore"
 }
 
