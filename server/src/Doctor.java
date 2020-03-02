@@ -15,4 +15,14 @@ public class Doctor extends User {
     public boolean canCreateMedicalReccord() {
         return true;
     }
+
+    @Override
+    public boolean canRead(MedicalReccord medicalReccord) {
+        return medicalReccord.getDoctor().getDivision().equals(getDivision());
+    }
+
+    @Override
+    public boolean canUpdate(MedicalReccord medicalReccord) {
+        return (medicalReccord.getDoctor().getId() == getId());
+    }
 }
