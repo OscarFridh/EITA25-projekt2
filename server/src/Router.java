@@ -38,21 +38,22 @@ public class Router {
 
     private String create(String[] commands) {
         int patientId = Integer.parseInt(commands[1]);
-        String text = parseMedicalReccordText(commands);
-        return medicalReccordController.create(patientId, 1, text);
-    }
-
-    private String parseMedicalReccordText(String[] commands) {
+        int nurseId = Integer.parseInt(commands[2]);
         StringJoiner joiner = new StringJoiner(" ");
-        for (int i = 2; i < commands.length; i++) {
+        for (int i = 3; i < commands.length; i++) {
             joiner.add(commands[i]);
         }
-        return joiner.toString();
+        String text = joiner.toString();
+        return medicalReccordController.create(patientId, nurseId, text);
     }
 
     private String update(String[] commands) {
         int id = Integer.parseInt(commands[1]);
-        String newText = parseMedicalReccordText(commands);
+        StringJoiner joiner = new StringJoiner(" ");
+        for (int i = 2; i < commands.length; i++) {
+            joiner.add(commands[i]);
+        }
+        String newText = joiner.toString();
         return medicalReccordController.update(id, newText);
     }
 
