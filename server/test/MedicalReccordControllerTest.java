@@ -61,7 +61,7 @@ class MedicalReccordControllerTest {
     void createMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(1);
-        MedicalReccordController sut = new MedicalReccordController(new Doctor(1, "Division"), repositoryMock, new NurseRepositoryMock(new Nurse(1, "Division")));
+        MedicalReccordController sut = new MedicalReccordController(new Doctor(1, "Division"), repositoryMock, new NurseRepositoryMock(new Nurse(3, "Division")));
 
         String response = sut.create(2, 3, "Text");
 
@@ -70,13 +70,14 @@ class MedicalReccordControllerTest {
         assertEquals(2, repositoryMock.getLastCreatePatientId());
         assertEquals(3, repositoryMock.getLastCreatedNurseId());
         assertEquals("Text", repositoryMock.getLastCreateText());
+        //assertEquals();
     }
 
     @Test
     void createAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(2);
-        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, new NurseRepositoryMock(new Nurse(1, "Division")));
+        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, new NurseRepositoryMock(new Nurse(4, "Division")));
 
         String response = sut.create(3, 4, "Text 2");
 
@@ -85,6 +86,21 @@ class MedicalReccordControllerTest {
         assertEquals(3, repositoryMock.getLastCreatePatientId());
         assertEquals(4, repositoryMock.getLastCreatedNurseId());
         assertEquals("Text 2", repositoryMock.getLastCreateText());
+    }
+
+    @Test
+    void createAnotherMedicalReccordForNonExistingNurse() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setCreateResult(2);
+        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, new NurseRepositoryMock(null));
+
+        String response = sut.create(3, 4, "Text 2");
+
+        assertEquals("No such nurse", response);
+        assertNull(repositoryMock.getLastCreateDoctorId());
+        assertNull(repositoryMock.getLastCreatePatientId());
+        assertNull(repositoryMock.getLastCreatedNurseId());
+        assertNull(repositoryMock.getLastCreateText());
     }
 
     @Test

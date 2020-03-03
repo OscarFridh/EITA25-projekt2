@@ -14,7 +14,10 @@ public class MedicalReccordController implements MedicalReccordControlling {
     public String create(int patientId, int nurseId, String text) {
         if (user.canCreateMedicalReccord()) {
             Doctor doctor = (Doctor)user;
-            Nurse nurse = new Nurse(nurseId, doctor.getDivision()); // TODO: Fix
+            Nurse nurse = nurseRepository.get(nurseId);
+            if (nurse == null) {
+                return "No such nurse";
+            }
             Patient patient = new Patient(patientId); // TODO: Fix
             int id = medicalReccordRepository.create(doctor, nurse, patient, text);
             return "Created reccord with id: " + id;
