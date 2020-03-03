@@ -16,6 +16,9 @@ public class server implements Runnable {
     public server(ServerSocket ss) throws IOException {
         medicalReccordRepository = new InMemoryMedicalReccordRepository();
         nurseRepository = new InMemoryNurseRepository();
+        nurseRepository.add(new Nurse(5, "Division 1"));
+        nurseRepository.add(new Nurse(6, "Division 2"));
+
         serverSocket = ss;
         newListener();
     }
