@@ -38,9 +38,15 @@ public class server implements Runnable {
             SSLSession session = socket.getSession();
             X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
 
+            // Authenticate user
             String subject = cert.getSubjectDN().getName(); // CN=...
             int certificateId = Integer.parseInt(subject.substring(3));
-            User user = authenticateUser(certificateId);
+            User user = userRepository.get(certificateId);
+            if (user == null) {
+                System.out.println("No such user in database");
+                return;
+            }
+
             Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, userRepository));
 
             PrintWriter out = null;
