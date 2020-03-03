@@ -114,6 +114,23 @@ class MedicalReccordControllerTest {
     }
 
     @Test
+    void createAnotherMedicalReccordForNonExistingPatient() {
+        MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
+        repositoryMock.setCreateResult(2);
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        userRepository.add(new Nurse(4, "Division"));
+        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, userRepository);
+
+        String response = sut.create(3, 4, "Text 2");
+
+        assertEquals("No such patient", response);
+        assertNull(repositoryMock.getLastCreateDoctorId());
+        assertNull(repositoryMock.getLastCreatePatientId());
+        assertNull(repositoryMock.getLastCreatedNurseId());
+        assertNull(repositoryMock.getLastCreateText());
+    }
+
+    @Test
     void createAnotherMedicalReccordForNonNurse() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(2);

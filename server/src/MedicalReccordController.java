@@ -18,8 +18,11 @@ public class MedicalReccordController implements MedicalReccordControlling {
             if (nurse == null || !(nurse instanceof  Nurse)) {
                 return "No such nurse";
             }
-            Patient patient = new Patient(patientId); // TODO: Fix
-            int id = medicalReccordRepository.create(doctor, (Nurse) nurse, patient, text);
+            User patient = userRepository.get(patientId);
+            if (patient == null || !(patient instanceof  Patient)) {
+                return "No such patient";
+            }
+            int id = medicalReccordRepository.create(doctor, (Nurse) nurse, (Patient) patient, text);
             return "Created reccord with id: " + id;
         } else {
             return "Access denied";
