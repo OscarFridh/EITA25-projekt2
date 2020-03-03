@@ -1,20 +1,22 @@
 public class MedicalReccordController implements MedicalReccordControlling {
 
     private User user;
-    private MedicalReccordRepository repository;
+    private MedicalReccordRepository medicalReccordRepository;
+    private NurseRepository nurseRepository;
 
-    public MedicalReccordController(User user, MedicalReccordRepository repository) {
+    public MedicalReccordController(User user, MedicalReccordRepository medicalReccordRepository, NurseRepository nurseRepository) {
         this.user = user;
-        this.repository = repository;
+        this.medicalReccordRepository = medicalReccordRepository;
+        this.nurseRepository = nurseRepository;
     }
 
     @Override
     public String create(int patientId, int nurseId, String text) {
         if (user.canCreateMedicalReccord()) {
             Doctor doctor = (Doctor)user;
-            Nurse nurse = new Nurse(nurseId, doctor.getDivision());
-            Patient patient = new Patient(patientId);
-            int id = repository.create(doctor, nurse, patient, text);
+            Nurse nurse = new Nurse(nurseId, doctor.getDivision()); // TODO: Fix
+            Patient patient = new Patient(patientId); // TODO: Fix
+            int id = medicalReccordRepository.create(doctor, nurse, patient, text);
             return "Created reccord with id: " + id;
         } else {
             return "Access denied";
@@ -23,7 +25,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String read(int id) {
-        MedicalReccord result = repository.get(id);
+        MedicalReccord result = medicalReccordRepository.get(id);
         if (result == null) {
             return "No such reccord";
         } else if (user.canRead(result)) {
@@ -35,7 +37,7 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String update(int id, String newText) {
-        MedicalReccord reccord = repository.get(id);
+        MedicalReccord reccord = medicalReccordRepository.get(id);
         if (reccord == null) {
             return "No such reccord";
         } else if(user.canUpdate(reccord)) {
@@ -48,10 +50,10 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     @Override
     public String delete(int id) {
-        MedicalReccord reccord = repository.get(id);
+        MedicalReccord reccord = medicalReccordRepository.get(id);
         if (!user.canDelete(reccord)) {
             return "Access denied";
-        } else if (repository.delete(id)) {
+        } else if (medicalReccordRepository.delete(id)) {
             return "Deleted reccord with id: " + id;
         } else {
             return "Could not delete reccord with id: " + id;

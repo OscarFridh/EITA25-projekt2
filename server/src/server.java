@@ -9,10 +9,13 @@ import java.util.HashMap;
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
-    private InMemoryMedicalReccordRepository repository;
+
+    private InMemoryMedicalReccordRepository medicalReccordRepository;
+    private InMemoryNurseRepository nurseRepository;
 
     public server(ServerSocket ss) throws IOException {
-        repository = new InMemoryMedicalReccordRepository();
+        medicalReccordRepository = new InMemoryMedicalReccordRepository();
+        nurseRepository = new InMemoryNurseRepository();
         serverSocket = ss;
         newListener();
     }
@@ -39,7 +42,7 @@ public class server implements Runnable {
             String subject = cert.getSubjectDN().getName(); // CN=...
             int certificateId = Integer.parseInt(subject.substring(3));
             User user = authenticateUser(certificateId);
-            Router router = new Router(new MedicalReccordController(user, repository));
+            Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, nurseRepository));
 
             PrintWriter out = null;
             BufferedReader in = null;
