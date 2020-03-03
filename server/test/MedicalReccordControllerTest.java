@@ -64,34 +64,41 @@ class MedicalReccordControllerTest {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(1);
         InMemoryUserRepository userRepository = new InMemoryUserRepository();
-        userRepository.add(new Doctor(2, "Division"));
-        userRepository.add(new Patient(3));
-        userRepository.add(new Nurse(4, "Division"));
-        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, userRepository);
+        Doctor doctor = new Doctor(2, "Division");
+        Patient patient = new Patient(3);
+        Nurse nurse = new Nurse(4, "Division");
+        userRepository.add(doctor);
+        userRepository.add(patient);
+        userRepository.add(nurse);
+        MedicalReccordController sut = new MedicalReccordController(doctor, repositoryMock, userRepository);
 
         String response = sut.create(3, 4, "Text");
-        assertEquals(2, repositoryMock.lastCreateParameters.doctor.getId());
-        assertEquals(3, repositoryMock.lastCreateParameters.patient.getId());
-        assertEquals(4, repositoryMock.lastCreateParameters.nurse.getId());
+
+        assertEquals(doctor, repositoryMock.lastCreateParameters.doctor);
+        assertEquals(patient, repositoryMock.lastCreateParameters.patient);
+        assertEquals(nurse, repositoryMock.lastCreateParameters.nurse);
         assertEquals("Text", repositoryMock.lastCreateParameters.text);
     }
 
     @Test
     void createAnotherMedicalReccord() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
-        repositoryMock.setCreateResult(1);
+        repositoryMock.setCreateResult(2);
         InMemoryUserRepository userRepository = new InMemoryUserRepository();
-        userRepository.add(new Doctor(3, "Division 2"));
-        userRepository.add(new Patient(4));
-        userRepository.add(new Nurse(5, "Division 2"));
-        MedicalReccordController sut = new MedicalReccordController(new Doctor(3, "Division 2"), repositoryMock, userRepository);
+        Doctor doctor = new Doctor(3, "Division 2");
+        Patient patient = new Patient(4);
+        Nurse nurse = new Nurse(5, "Division 2");
+        userRepository.add(doctor);
+        userRepository.add(patient);
+        userRepository.add(nurse);
+        MedicalReccordController sut = new MedicalReccordController(doctor, repositoryMock, userRepository);
 
         String response = sut.create(4, 5, "Text 2");
 
-        assertEquals("Created reccord with id: 1", response);
-        assertEquals(3, repositoryMock.lastCreateParameters.doctor.getId());
-        assertEquals(4, repositoryMock.lastCreateParameters.patient.getId());
-        assertEquals(5, repositoryMock.lastCreateParameters.nurse.getId());
+        assertEquals("Created reccord with id: 2", response);
+        assertEquals(doctor, repositoryMock.lastCreateParameters.doctor);
+        assertEquals(patient, repositoryMock.lastCreateParameters.patient);
+        assertEquals(nurse, repositoryMock.lastCreateParameters.nurse);
         assertEquals("Text 2", repositoryMock.lastCreateParameters.text);
     }
 
@@ -100,6 +107,7 @@ class MedicalReccordControllerTest {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(2);
         InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        userRepository.add(new Patient(3));
         MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, userRepository);
 
         String response = sut.create(3, 4, "Text 2");
@@ -126,7 +134,9 @@ class MedicalReccordControllerTest {
     void createAnotherMedicalReccordForNonNurse() {
         MedicalReccordRepositoryMock repositoryMock = new MedicalReccordRepositoryMock();
         repositoryMock.setCreateResult(2);
-        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, new UserRepositoryMock(new Patient(1)));
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        userRepository.add(new Patient(3));
+        MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, userRepository);
 
         String response = sut.create(3, 4, "Text 2");
 
@@ -278,10 +288,6 @@ class MedicalReccordControllerTest {
 
         private Integer lastDelete;
         private boolean deleteResult;
-
-        public Integer getLastFetch() {
-            return lastFetch;
-        }
 
         public Integer getLastDelete() {
             return lastDelete;
