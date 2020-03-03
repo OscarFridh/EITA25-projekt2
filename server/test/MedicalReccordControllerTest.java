@@ -70,12 +70,10 @@ class MedicalReccordControllerTest {
         MedicalReccordController sut = new MedicalReccordController(new Doctor(2, "Division"), repositoryMock, userRepository);
 
         String response = sut.create(3, 4, "Text");
-
-        assertEquals("Created reccord with id: 1", response);
-        assertEquals(2, repositoryMock.getLastCreateDoctorId());
-        assertEquals(3, repositoryMock.getLastCreatePatientId());
-        assertEquals(4, repositoryMock.getLastCreatedNurseId());
-        assertEquals("Text", repositoryMock.getLastCreateText());
+        assertEquals(2, repositoryMock.lastCreateParameters.doctor.getId());
+        assertEquals(3, repositoryMock.lastCreateParameters.patient.getId());
+        assertEquals(4, repositoryMock.lastCreateParameters.nurse.getId());
+        assertEquals("Text", repositoryMock.lastCreateParameters.text);
     }
 
     @Test
@@ -91,10 +89,10 @@ class MedicalReccordControllerTest {
         String response = sut.create(4, 5, "Text 2");
 
         assertEquals("Created reccord with id: 1", response);
-        assertEquals(3, repositoryMock.getLastCreateDoctorId());
-        assertEquals(4, repositoryMock.getLastCreatePatientId());
-        assertEquals(5, repositoryMock.getLastCreatedNurseId());
-        assertEquals("Text 2", repositoryMock.getLastCreateText());
+        assertEquals(3, repositoryMock.lastCreateParameters.doctor.getId());
+        assertEquals(4, repositoryMock.lastCreateParameters.patient.getId());
+        assertEquals(5, repositoryMock.lastCreateParameters.nurse.getId());
+        assertEquals("Text 2", repositoryMock.lastCreateParameters.text);
     }
 
     @Test
@@ -107,10 +105,7 @@ class MedicalReccordControllerTest {
         String response = sut.create(3, 4, "Text 2");
 
         assertEquals("No such nurse", response);
-        assertNull(repositoryMock.getLastCreateDoctorId());
-        assertNull(repositoryMock.getLastCreatePatientId());
-        assertNull(repositoryMock.getLastCreatedNurseId());
-        assertNull(repositoryMock.getLastCreateText());
+        assertNull(repositoryMock.lastCreateParameters);
     }
 
     @Test
@@ -124,10 +119,7 @@ class MedicalReccordControllerTest {
         String response = sut.create(3, 4, "Text 2");
 
         assertEquals("No such patient", response);
-        assertNull(repositoryMock.getLastCreateDoctorId());
-        assertNull(repositoryMock.getLastCreatePatientId());
-        assertNull(repositoryMock.getLastCreatedNurseId());
-        assertNull(repositoryMock.getLastCreateText());
+        assertNull(repositoryMock.lastCreateParameters);
     }
 
     @Test
@@ -139,10 +131,7 @@ class MedicalReccordControllerTest {
         String response = sut.create(3, 4, "Text 2");
 
         assertEquals("No such nurse", response);
-        assertNull(repositoryMock.getLastCreateDoctorId());
-        assertNull(repositoryMock.getLastCreatePatientId());
-        assertNull(repositoryMock.getLastCreatedNurseId());
-        assertNull(repositoryMock.getLastCreateText());
+        assertNull(repositoryMock.lastCreateParameters);
     }
 
     @Test
@@ -156,10 +145,7 @@ class MedicalReccordControllerTest {
         String response = sut.create(2, 1, "Text");
 
         assertEquals("Access denied", response);
-        assertNull(repositoryMock.getLastCreatePatientId());
-        assertNull(repositoryMock.getLastCreateDoctorId());
-        assertNull(repositoryMock.getLastCreatedNurseId());
-        assertNull(repositoryMock.getLastCreateText());
+        assertNull(repositoryMock.lastCreateParameters);
     }
 
     @Test
@@ -268,36 +254,33 @@ class MedicalReccordControllerTest {
 
     class MedicalReccordRepositoryMock implements MedicalReccordRepository {
 
+        class CreateParameters {
+            private Doctor doctor;
+            private Nurse nurse;
+            private Patient patient;
+            private String text;
+
+            public CreateParameters(Doctor doctor, Nurse nurse, Patient patient, String text) {
+                this.doctor = doctor;
+                this.nurse = nurse;
+                this.patient = patient;
+                this.text = text;
+            }
+        }
+
+
+
         private MedicalReccord fetchResult;
         private Integer lastFetch;
 
         private Integer createResult;
-        private Integer lastCreatePatientId;
-        private Integer lastCreatedDoctorId;
-        private Integer lastCreatedNurseId;
-        private String lastCreateText;
+        private CreateParameters lastCreateParameters;
 
         private Integer lastDelete;
         private boolean deleteResult;
 
         public Integer getLastFetch() {
             return lastFetch;
-        }
-
-        public Integer getLastCreatePatientId() {
-            return lastCreatePatientId;
-        }
-
-        public Integer getLastCreatedNurseId() {
-            return lastCreatedNurseId;
-        }
-
-        public Integer getLastCreateDoctorId() {
-            return lastCreatedDoctorId;
-        }
-
-        public String getLastCreateText() {
-            return lastCreateText;
         }
 
         public Integer getLastDelete() {
@@ -329,10 +312,7 @@ class MedicalReccordControllerTest {
 
         @Override
         public int create(Doctor doctor, Nurse nurse, Patient patient, String text) {
-            lastCreatePatientId = patient.getId();
-            lastCreatedDoctorId = doctor.getId();
-            lastCreatedNurseId = nurse.getId();
-            lastCreateText = text;
+            lastCreateParameters = new CreateParameters(doctor, nurse, patient, text);
             return createResult;
         }
 
