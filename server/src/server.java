@@ -4,35 +4,31 @@ import java.security.KeyStore;
 import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
-import java.util.HashMap;
 
 public class server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
 
     private InMemoryMedicalReccordRepository medicalReccordRepository;
-    private InMemoryNurseRepository nurseRepository;
+    private InMemoryUserRepository userRepository;
 
     public server(ServerSocket ss) throws IOException {
         medicalReccordRepository = new InMemoryMedicalReccordRepository();
-        nurseRepository = new InMemoryNurseRepository();
-        nurseRepository.add(new Nurse(5, "Division 1"));
-        nurseRepository.add(new Nurse(6, "Division 2"));
+        userRepository = new InMemoryUserRepository();
+        userRepository.add(new Patient(1));
+        userRepository.add(new Patient(2));
+        userRepository.add(new Doctor(3, "Division 1"));
+        userRepository.add(new Doctor(4, "Division 2"));
+        userRepository.add(new Nurse(5, "Division 1"));
+        userRepository.add(new Nurse(6, "Division 2"));
+        userRepository.add(new Government(7));
 
         serverSocket = ss;
         newListener();
     }
 
     private User authenticateUser(int id) {
-        HashMap<Integer, User> map = new HashMap();
-        map.put(1, new Patient(1));
-        map.put(2, new Patient(2));
-        map.put(3, new Doctor(3, "Division 1"));
-        map.put(4, new Doctor(4, "Division 2"));
-        map.put(5, new Nurse(5, "Division 1"));
-        map.put(6, new Nurse(6, "Division 2"));
-        map.put(7, new Government(7));
-        return map.get(id);
+        return userRepository.get(id);
     }
 
     public void run() {
@@ -45,7 +41,7 @@ public class server implements Runnable {
             String subject = cert.getSubjectDN().getName(); // CN=...
             int certificateId = Integer.parseInt(subject.substring(3));
             User user = authenticateUser(certificateId);
-            Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, nurseRepository));
+            Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, userRepository));
 
             PrintWriter out = null;
             BufferedReader in = null;

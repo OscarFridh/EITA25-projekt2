@@ -2,24 +2,24 @@ public class MedicalReccordController implements MedicalReccordControlling {
 
     private User user;
     private MedicalReccordRepository medicalReccordRepository;
-    private NurseRepository nurseRepository;
+    private UserRepository userRepository;
 
-    public MedicalReccordController(User user, MedicalReccordRepository medicalReccordRepository, NurseRepository nurseRepository) {
+    public MedicalReccordController(User user, MedicalReccordRepository medicalReccordRepository, UserRepository userRepository) {
         this.user = user;
         this.medicalReccordRepository = medicalReccordRepository;
-        this.nurseRepository = nurseRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public String create(int patientId, int nurseId, String text) {
         if (user.canCreateMedicalReccord()) {
             Doctor doctor = (Doctor)user;
-            Nurse nurse = nurseRepository.get(nurseId);
-            if (nurse == null) {
+            User nurse = userRepository.get(nurseId);
+            if (nurse == null || !(nurse instanceof  Nurse)) {
                 return "No such nurse";
             }
             Patient patient = new Patient(patientId); // TODO: Fix
-            int id = medicalReccordRepository.create(doctor, nurse, patient, text);
+            int id = medicalReccordRepository.create(doctor, (Nurse) nurse, patient, text);
             return "Created reccord with id: " + id;
         } else {
             return "Access denied";
