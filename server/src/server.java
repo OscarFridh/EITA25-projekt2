@@ -68,7 +68,7 @@ public class server implements Runnable {
 			socket.close();
     	    numConnectedClients--;
             System.out.println("client disconnected");
-            System.out.println(numConnectedClients + " concurrent connection(s)\n");
+            //System.out.println(numConnectedClients + " concurrent connection(s)\n"); // Hiding for now, since it's not working properly.
 		} catch (IOException e) {
             System.out.println("Client died: " + e.getMessage());
             e.printStackTrace();
