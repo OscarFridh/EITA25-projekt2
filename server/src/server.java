@@ -47,7 +47,7 @@ public class server implements Runnable {
                 return;
             }
 
-            Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, userRepository));
+            Router router = new Router(new MedicalReccordController(user, medicalReccordRepository, userRepository, new AuditLogger()));
 
             PrintWriter out = null;
             BufferedReader in = null;
